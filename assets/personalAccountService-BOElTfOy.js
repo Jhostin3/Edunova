@@ -1,4 +1,4 @@
-import{r as e}from"./index-Bi8JBEUJ.js";function t(e){if(!e)return`-`;let t=new Date(`${e}T00:00:00`);return Number.isNaN(t.getTime())?e:new Intl.DateTimeFormat(`es-EC`,{day:`2-digit`,month:`2-digit`,year:`numeric`}).format(t)}async function n(t){let{data:n,error:r}=await e.from(`personal`).select(`
+import{r as e}from"./index-CCITJ0gF.js";function t(e){if(!e)return`-`;let t=new Date(`${e}T00:00:00`);return Number.isNaN(t.getTime())?e:new Intl.DateTimeFormat(`es-EC`,{day:`2-digit`,month:`2-digit`,year:`numeric`}).format(t)}async function n(t){let{data:n,error:r}=await e.from(`personal`).select(`
       id,
       user_id,
       tipo_identificacion,

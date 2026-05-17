@@ -1,0 +1,1 @@
+import{t as e}from"./jsx-runtime-CP2iHdEU.js";import{t}from"./PersonalCuentaPage-Divjy37L.js";var n=e();function r(){return(0,n.jsx)(t,{title:`Mi cuenta`,description:`Consulta tu cuenta institucional y administra la seguridad de tu acceso.`})}export{r as AdminCuentaPage};

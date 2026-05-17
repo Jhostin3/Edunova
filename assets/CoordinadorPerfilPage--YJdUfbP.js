@@ -1,1 +1,0 @@
-import{t as e}from"./jsx-runtime-CP2iHdEU.js";import{t}from"./PersonalPerfilPage-rnW4bWAV.js";var n=e();function r(){return(0,n.jsx)(t,{title:`Mi perfil`,description:`Consulta y actualiza tus datos personales como coordinador de clubes.`})}export{r as CoordinadorPerfilPage};

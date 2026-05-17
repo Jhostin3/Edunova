@@ -1,4 +1,4 @@
-import{r as e}from"./index-Bi8JBEUJ.js";async function t(){let{data:t,error:n}=await e.from(`representantes`).select(`
+import{r as e}from"./index-CCITJ0gF.js";async function t(){let{data:t,error:n}=await e.from(`representantes`).select(`
       id,
       nombres,
       apellidos,

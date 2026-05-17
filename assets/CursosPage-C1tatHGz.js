@@ -1,0 +1,73 @@
+import{r as e}from"./chunk-DECur_0Z.js";import{n as t,t as n}from"./jsx-runtime-CP2iHdEU.js";import{r}from"./index-CCITJ0gF.js";import{t as i}from"./EmptyState-BQGUmmxk.js";import{t as a}from"./PageHeader-6ecuzQJ1.js";import{t as o}from"./DataTable-BSC7wasz.js";var s=e(t(),1);function c(e,t){let n=e.nivel?.trim()??``,r=e.paralelo?.trim()??``,i=e.especialidad?.trim()??``,a=e.descripcion?.trim()??``,o=[n,r,i].filter(Boolean).join(` `);return{nivel:n,paralelo:r,especialidad:i,descripcion:a||null,estado:!!e.estado,nombre:o,periodo_id:t}}function l(e){return String(e??``).trim().toLowerCase()}function u(e,t){let n=l(e.nombre)&&l(e.nombre)===l(t.nombre),r=l(e.nivel)===l(t.nivel)&&l(e.paralelo)===l(t.paralelo)&&l(e.especialidad)===l(t.especialidad);return n||r}async function d(){let{data:e,error:t}=await r.from(`periodos_escolares`).select(`id, nombre, fecha_inicio, fecha_fin, activo, created_at`).eq(`activo`,!0).order(`created_at`,{ascending:!1}).limit(1).maybeSingle();if(console.log(`[cursoService] periodo_activo_result`,{periodoActivo:e,periodoError:t}),t)throw Error(t.message);if(!e?.id)throw Error(`No existe un periodo escolar activo. Crea uno en la base de datos antes de registrar cursos.`);return e}async function f(){return(await d()).id}async function p(e){let{data:t,error:n}=await r.from(`cursos`).select(`
+      id,
+      periodo_id,
+      nombre,
+      nivel,
+      paralelo,
+      especialidad,
+      descripcion,
+      estado,
+      created_at,
+      updated_at,
+      periodo:periodos_escolares (
+        id,
+        nombre,
+        fecha_inicio,
+        fecha_fin,
+        activo
+      )
+    `).eq(`id`,e).maybeSingle();if(n)throw Error(n.message);if(!t?.id)throw Error(`No se encontro el curso seleccionado.`);return t}async function m(){let{data:e,error:t}=await r.from(`cursos`).select(`
+      id,
+      periodo_id,
+      nombre,
+      nivel,
+      paralelo,
+      especialidad,
+      descripcion,
+      estado,
+      created_at,
+      updated_at,
+      periodo:periodos_escolares (
+        id,
+        nombre,
+        fecha_inicio,
+        fecha_fin,
+        activo
+      )
+    `).order(`created_at`,{ascending:!1});return{data:e??[],error:t}}async function h(e){try{let t=c(e,await f());console.log(`[cursoService] createCurso:payload`,t);let{data:n,error:i}=await r.from(`cursos`).insert(t).select().single();return i&&console.log(`[cursoService] createCurso:error`,i),{data:n,error:i}}catch(e){return console.log(`[cursoService] createCurso:unexpected_error`,e),{data:null,error:e instanceof Error?e:Error(`Error al crear curso`)}}}async function g(e,t){try{let n=(await p(e)).periodo_id,i=c(t,n);console.log(`[cursoService] updateCurso:payload`,{id:e,...i});let{data:a,error:o}=await r.from(`cursos`).update(i).eq(`id`,e).select().single();return o&&console.log(`[cursoService] updateCurso:error`,o),{data:a,error:o}}catch(e){return console.log(`[cursoService] updateCurso:unexpected_error`,e),{data:null,error:e instanceof Error?e:Error(`Error al actualizar curso`)}}}async function _(e){try{let[t,n]=await Promise.all([p(e),d()]);if(t.periodo_id===n.id)return{data:{curso:t,periodoActivo:n,alreadyEnabled:!0},error:null};let{data:i,error:a}=await r.from(`cursos`).select(`
+        id,
+        periodo_id,
+        nombre,
+        nivel,
+        paralelo,
+        especialidad,
+        descripcion,
+        estado,
+        created_at,
+        updated_at,
+        periodo:periodos_escolares (
+          id,
+          nombre,
+          fecha_inicio,
+          fecha_fin,
+          activo
+        )
+      `).eq(`periodo_id`,n.id);if(a)return{data:null,error:a};let o=(i??[]).find(e=>u(e,t));if(o)return{data:{curso:o,periodoActivo:n,alreadyEnabled:!0},error:null};let s={periodo_id:n.id,nombre:t.nombre,nivel:t.nivel,paralelo:t.paralelo,especialidad:t.especialidad,descripcion:t.descripcion,estado:!0},{data:c,error:l}=await r.from(`cursos`).insert(s).select(`
+        id,
+        periodo_id,
+        nombre,
+        nivel,
+        paralelo,
+        especialidad,
+        descripcion,
+        estado,
+        created_at,
+        updated_at,
+        periodo:periodos_escolares (
+          id,
+          nombre,
+          fecha_inicio,
+          fecha_fin,
+          activo
+        )
+      `).single();return l?{data:null,error:l}:{data:{curso:c,periodoActivo:n,alreadyEnabled:!1},error:null}}catch(e){return{data:null,error:e instanceof Error?e:Error(`Error al habilitar el curso en el periodo activo`)}}}var v=n(),y={nivel:``,paralelo:``,especialidad:``,descripcion:``,estado:`true`};function b({initialData:e,submitting:t,onCancel:n,onSubmit:r}){let[i,a]=(0,s.useState)(()=>x(e)),o=e=>{let{name:t,value:n}=e.target;a(e=>({...e,[t]:n}))};return(0,v.jsxs)(`form`,{onSubmit:e=>{e.preventDefault(),r({...i,estado:i.estado===`true`})},className:`rounded-2xl border border-slate-200 bg-white p-6 shadow-sm`,children:[(0,v.jsxs)(`div`,{className:`flex items-start justify-between gap-4`,children:[(0,v.jsxs)(`div`,{children:[(0,v.jsx)(`h2`,{className:`text-lg font-semibold text-slate-900`,children:e?`Editar curso`:`Nuevo curso`}),(0,v.jsx)(`p`,{className:`mt-1 text-sm text-slate-500`,children:`El nombre del curso se genera automaticamente a partir de nivel, paralelo y especialidad.`})]}),(0,v.jsx)(`button`,{type:`button`,onClick:n,className:`rounded-xl border border-slate-200 px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50`,children:`Cerrar`})]}),(0,v.jsxs)(`div`,{className:`mt-6 grid gap-4 md:grid-cols-2`,children:[(0,v.jsx)(S,{label:`Nivel`,children:(0,v.jsx)(`input`,{name:`nivel`,value:i.nivel,onChange:o,required:!0,className:`input`})}),(0,v.jsx)(S,{label:`Paralelo`,children:(0,v.jsx)(`input`,{name:`paralelo`,value:i.paralelo,onChange:o,required:!0,className:`input`})}),(0,v.jsx)(S,{label:`Especialidad`,children:(0,v.jsx)(`input`,{name:`especialidad`,value:i.especialidad,onChange:o,required:!0,className:`input`})}),(0,v.jsx)(S,{label:`Estado`,children:(0,v.jsxs)(`select`,{name:`estado`,value:i.estado,onChange:o,className:`input`,children:[(0,v.jsx)(`option`,{value:`true`,children:`Activo`}),(0,v.jsx)(`option`,{value:`false`,children:`Inactivo`})]})})]}),(0,v.jsx)(S,{label:`Descripcion`,className:`mt-4`,children:(0,v.jsx)(`textarea`,{name:`descripcion`,value:i.descripcion,onChange:o,rows:3,className:`input min-h-24`})}),(0,v.jsxs)(`div`,{className:`mt-6 flex justify-end gap-3`,children:[(0,v.jsx)(`button`,{type:`button`,onClick:n,className:`rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50`,children:`Cancelar`}),(0,v.jsx)(`button`,{type:`submit`,disabled:t,className:`rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-60`,children:t?`Guardando...`:`Guardar curso`})]})]})}function x(e){return e?{nivel:e.nivel??``,paralelo:e.paralelo??``,especialidad:e.especialidad??``,descripcion:e.descripcion??``,estado:String(e.estado??!0)}:y}function S({label:e,children:t,className:n=``}){return(0,v.jsxs)(`label`,{className:n,children:[(0,v.jsx)(`span`,{className:`mb-1.5 block text-sm font-medium text-slate-700`,children:e}),t]})}function C(){let[e,t]=(0,s.useState)([]),[n,r]=(0,s.useState)(!0),[c,l]=(0,s.useState)(!1),[u,d]=(0,s.useState)(null),[f,p]=(0,s.useState)(``),[y,x]=(0,s.useState)(``),[S,C]=(0,s.useState)(!1),[O,k]=(0,s.useState)(null);async function A(){r(!0),p(``);let{data:e,error:n}=await m();n?(p(n.message),t([])):t(e),r(!1)}(0,s.useEffect)(()=>{let e=setTimeout(()=>{A()},0);return()=>clearTimeout(e)},[]);let j=(0,s.useMemo)(()=>e.find(e=>e.periodo?.activo)?.periodo??null,[e]),M=(0,s.useMemo)(()=>e.filter(e=>e.periodo_id===j?.id),[j?.id,e]),N=(0,s.useMemo)(()=>{let t=new Map;for(let n of e){if(!j?.id||n.periodo_id===j.id)continue;let e=n.periodo?.id??n.periodo_id;t.has(e)||t.set(e,{periodo:n.periodo??{id:e,nombre:`Periodo sin nombre`,fecha_inicio:null},cursos:[]}),t.get(e).cursos.push(n)}return Array.from(t.values()).map(e=>({...e,cursos:e.cursos.sort((e,t)=>D(e).localeCompare(D(t)))})).sort((e,t)=>{let n=e.periodo.fecha_inicio||``;return(t.periodo.fecha_inicio||``).localeCompare(n)})},[j,e]),P=async e=>{l(!0),p(``),x(``);let{error:t}=await(O?g(O.id,e):h(e));if(t){p(t.message),l(!1);return}await A(),k(null),C(!1),l(!1)},F=async e=>{d(e.id),p(``),x(``);let{data:t,error:n}=await _(e.id);if(n){p(n.message),d(null);return}let r=t?.periodoActivo?.nombre||`el periodo activo`;x(t?.alreadyEnabled?`El curso "${D(e)}" ya esta habilitado para ${r}.`:`Curso "${D(e)}" habilitado correctamente para ${r}.`),await A(),d(null)};return(0,v.jsxs)(`div`,{className:`space-y-6`,children:[(0,v.jsx)(a,{title:`Cursos`,description:`Gestiona cursos por periodo y reutiliza la estructura academica de periodos anteriores.`,actionLabel:`Nuevo curso`,onAction:()=>{k(null),C(!0)}}),(0,v.jsxs)(`section`,{className:`rounded-2xl border border-slate-200 bg-white p-5 shadow-sm`,children:[(0,v.jsx)(`p`,{className:`text-sm font-semibold text-slate-700`,children:`Periodo activo`}),(0,v.jsx)(`p`,{className:`mt-1 text-2xl font-bold text-slate-900`,children:j?.nombre||`No hay periodo activo configurado`}),(0,v.jsx)(`p`,{className:`mt-2 text-sm text-slate-500`,children:`La matricula solo muestra cursos asociados a este periodo. Los cursos historicos se pueden habilitar sin modificar su periodo original.`})]}),f?(0,v.jsx)(`div`,{className:`rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700`,children:f}):null,y?(0,v.jsx)(`div`,{className:`rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700`,children:y}):null,S?(0,v.jsx)(b,{initialData:O,onCancel:()=>{k(null),C(!1)},onSubmit:P,submitting:c},O?.id??`new-curso`):null,(0,v.jsxs)(`section`,{className:`space-y-4`,children:[(0,v.jsx)(T,{title:`Cursos del periodo activo`,description:`Estos cursos estan disponibles para matricula y re-matricula.`}),M.length||n?(0,v.jsx)(o,{columns:[{key:`nombre`,label:`Nombre`},{key:`nivel`,label:`Nivel`},{key:`paralelo`,label:`Paralelo`},{key:`especialidad`,label:`Especialidad`,render:e=>e.especialidad||`-`},{key:`estado`,label:`Estado`,render:e=>(0,v.jsx)(E,{estado:e.estado})},{key:`actions`,label:`Acciones`,render:e=>(0,v.jsx)(`button`,{type:`button`,onClick:()=>{k(e),C(!0)},className:`rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50`,children:`Editar`})}],rows:M,loading:n,emptyMessage:`No hay cursos en el periodo activo.`}):(0,v.jsx)(i,{title:`Sin cursos activos`,description:`Crea un curso nuevo o habilita cursos desde periodos anteriores.`,actionLabel:`Nuevo curso`,onAction:()=>{k(null),C(!0)}})]}),(0,v.jsxs)(`section`,{className:`space-y-4`,children:[(0,v.jsx)(T,{title:`Cursos de periodos anteriores`,description:`Selecciona solo los cursos que la institucion usara en el periodo activo.`}),n?(0,v.jsx)(`div`,{className:`rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-500`,children:`Cargando cursos historicos...`}):N.length?N.map(e=>(0,v.jsx)(w,{group:e,activeCursos:M,activePeriodo:j,enablingId:u,onEnable:F,onEdit:e=>{k(e),C(!0)}},e.periodo.id)):(0,v.jsx)(i,{title:`Sin cursos historicos`,description:`Cuando existan cursos en periodos anteriores, podras habilitarlos para el periodo activo desde aqui.`})]})]})}function w({group:e,activeCursos:t,activePeriodo:n,enablingId:r,onEnable:i,onEdit:a}){return(0,v.jsxs)(`section`,{className:`rounded-2xl border border-slate-200 bg-white p-5 shadow-sm`,children:[(0,v.jsxs)(`div`,{className:`flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between`,children:[(0,v.jsxs)(`div`,{children:[(0,v.jsx)(`h3`,{className:`text-lg font-semibold text-slate-900`,children:e.periodo.nombre}),(0,v.jsxs)(`p`,{className:`text-sm text-slate-500`,children:[`Cursos disponibles para reutilizar en `,n?.nombre||`el periodo activo`,`.`]})]}),(0,v.jsx)(`span`,{className:`w-fit rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600`,children:`Periodo historico`})]}),(0,v.jsxs)(`div`,{className:`mt-4 overflow-hidden rounded-xl border border-slate-200`,children:[(0,v.jsxs)(`div`,{className:`grid grid-cols-12 bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500`,children:[(0,v.jsx)(`span`,{className:`col-span-4`,children:`Curso`}),(0,v.jsx)(`span`,{className:`col-span-2`,children:`Nivel`}),(0,v.jsx)(`span`,{className:`col-span-2`,children:`Paralelo`}),(0,v.jsx)(`span`,{className:`col-span-2`,children:`Estado`}),(0,v.jsx)(`span`,{className:`col-span-2 text-right`,children:`Acciones`})]}),e.cursos.map(e=>{let n=!!t.find(t=>k(t,e));return(0,v.jsxs)(`div`,{className:`grid grid-cols-12 items-center gap-2 border-t border-slate-100 px-4 py-3 text-sm`,children:[(0,v.jsxs)(`div`,{className:`col-span-4`,children:[(0,v.jsx)(`p`,{className:`font-semibold text-slate-900`,children:D(e)}),e.descripcion?(0,v.jsx)(`p`,{className:`mt-1 text-xs text-slate-500`,children:e.descripcion}):null]}),(0,v.jsx)(`span`,{className:`col-span-2 text-slate-600`,children:e.nivel||`-`}),(0,v.jsx)(`span`,{className:`col-span-2 text-slate-600`,children:e.paralelo||`-`}),(0,v.jsx)(`div`,{className:`col-span-2`,children:n?(0,v.jsx)(`span`,{className:`rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700`,children:`Ya habilitado`}):(0,v.jsx)(`span`,{className:`rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700`,children:`Historico`})}),(0,v.jsxs)(`div`,{className:`col-span-2 flex justify-end gap-2`,children:[(0,v.jsx)(`button`,{type:`button`,onClick:()=>a(e),className:`rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50`,children:`Editar`}),(0,v.jsx)(`button`,{type:`button`,onClick:()=>i(e),disabled:n||r===e.id,className:`rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50`,children:n?`Ya habilitado`:r===e.id?`Habilitando...`:`Habilitar`})]})]},e.id)})]})]})}function T({title:e,description:t}){return(0,v.jsxs)(`div`,{children:[(0,v.jsx)(`h2`,{className:`text-lg font-semibold text-slate-900`,children:e}),(0,v.jsx)(`p`,{className:`mt-1 text-sm text-slate-500`,children:t})]})}function E({estado:e}){return(0,v.jsx)(`span`,{className:`rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700`,children:e===!0?`Activo`:e===!1?`Inactivo`:`Sin estado`})}function D(e){return e?e.nombre||[e.nivel,e.paralelo,e.especialidad].filter(Boolean).join(` `):`-`}function O(e){return String(e??``).trim().toLowerCase()}function k(e,t){let n=O(e.nombre)&&O(e.nombre)===O(t.nombre),r=O(e.nivel)===O(t.nivel)&&O(e.paralelo)===O(t.paralelo)&&O(e.especialidad)===O(t.especialidad);return n||r}export{C as CursosPage};
