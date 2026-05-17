@@ -1,0 +1,47 @@
+@import 'tailwindcss';
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #f6f8fb;
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@keyframes floatCard {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.input {
+  width: 100%;
+  border-radius: 0.85rem;
+  border: 1px solid #dbe1ea;
+  background: #fff;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.95rem;
+  color: #0f172a;
+  outline: none;
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.input:focus {
+  border-color: #0f172a;
+  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+}
